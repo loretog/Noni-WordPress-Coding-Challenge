@@ -2,7 +2,7 @@
 
 ## OBJECTIVE
 
-To create a WordPress plugin using this template or your own file structure.
+To create a WordPress plugin using this template.
 
 ## INSTRUCTIONS
 
