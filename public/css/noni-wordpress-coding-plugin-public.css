@@ -2,3 +2,6 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+.noni-form .form-group { margin-bottom: 15px; }
+.noni-form .form-group input { display: block; }

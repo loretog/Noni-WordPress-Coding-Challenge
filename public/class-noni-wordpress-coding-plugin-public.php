@@ -52,6 +52,8 @@ class Noni_Wordpress_Coding_Plugin_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		add_shortcode( 'noni-wordpress-form', [ $this, 'noni_wordpress_form_shortcode' ] );
+
 	}
 
 	/**
@@ -100,4 +102,42 @@ class Noni_Wordpress_Coding_Plugin_Public {
 
 	}
 
+	public function noni_wordpress_form_shortcode( $atts ) {
+		$message = "";		
+		if( isset( $_POST[ 'noni-wordpress-save-info' ] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'save_info' ) ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . NONI_TABLE_NAME;
+
+			$user_id = sanitize_text_field( $_POST[ 'user_id' ] );
+			$address = sanitize_text_field( $_POST[ 'address' ] );
+			$address2 = sanitize_text_field( $_POST[ 'address2' ] );
+			$city = sanitize_text_field( $_POST[ 'city' ] );
+			$province = sanitize_text_field( $_POST[ 'province' ] );
+			$postal_code = sanitize_text_field( $_POST[ 'postal_code' ] );
+			$country = sanitize_text_field( $_POST[ 'contry' ] );
+
+			if( $wpdb->insert( 
+				$table_name, 
+				array( 
+					'user_id' => $user_id, 
+					'address' => $address, 
+					'address2' => $address2, 
+					'city' => $city, 
+					'province' => $province, 
+					'postal_code' => $postal_code, 
+					'country' => $country, 					
+				) 
+			) ) {
+				$message = "<h2 style='color: green;'>Address successfully updated!</h2>";
+			}	else {
+				$message = "<h2 style='color: red;'>Something went wrong, please try again.</h2>";			
+			}
+		} 
+		ob_start();		
+		echo $message;
+		include dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'partials' . DIRECTORY_SEPARATOR . 'noni-wordpress-coding-plugin-public-display.php';
+		return ob_get_clean();
+	}	
+
 }
+
